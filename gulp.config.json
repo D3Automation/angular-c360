@@ -1,0 +1,27 @@
+{
+    "js": [
+        "modules/**/*.js",
+        "common/**/*.js",
+        "directives/**/*.js",
+        "services/**/*.js",
+        "filters/**/*.js",        
+        "!./**/*.spec.js"
+    ],
+    "css": [
+        "content/**/*.css"
+    ],
+    "specs": [
+        "test/specs/*.spec.js"
+    ],
+    "htmltemplates": "./directives/**/*.html",
+    "templatesfilename": "templates.js",
+    "templatemodule": "angular-c360",
+    "images": [
+        "./content/images/**/*"
+    ],
+    "report": "./report/",
+    "build": "./build/",
+    "temp": "./temp/",
+    "deployjs": "C:\\Projects\\D3 ETO Samples\\angular-c360-sample\\src\\angular-c360-sample\\wwwroot\\lib\\angular-c360",
+    "deploycontent": "C:\\Projects\\D3 ETO Samples\\angular-c360-sample\\src\\angular-c360-sample\\wwwroot\\lib\\angular-c360"
+}

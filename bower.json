@@ -1,0 +1,14 @@
+{
+    "name": "angular-c360",
+    "version": "0.1.0",
+    "description": "Angular components for working with data from Configurator 360",
+    "author": "D3 Automation",
+    "repository": {
+        "type": "git",
+        "url": ""
+    },
+    "dependencies": {
+        "angular": "~1.4.9",
+        "breeze-client": "~1.5.4"
+    }
+}
