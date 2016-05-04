@@ -12,10 +12,6 @@ bower install angular-c360
 
 _Not yet implemented_
 
-### And coding style tests
-
-_Not yet implemented_
-
 ## Versioning
 
 We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/D3Automation/angular-c360/tags). 
