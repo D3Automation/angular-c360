@@ -64,7 +64,8 @@ gulp.task('js', ['bowerjson', 'templatecache'], function () {
     var banner = ['/**',
       ' * <%= pkg.name %> - <%= pkg.description %>',
       ' * @version v<%= pkg.version %>',
-      ' * Copyright 2016 D3 Automation.  All Rights Reserved.',
+      ' * (c) 2016 D3 Automation  http://d3tech.net/solutions/automation/',
+      ' * License: MIT',
       ' */',
       ''].join('\n');
 
