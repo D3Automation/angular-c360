@@ -1,5 +1,7 @@
 # angular-c360
-Angular components for working with data from Configurator 360
+Angular components for working with data from [Configurator 360](configurator360.autodesk.com).
+
+By using the [c360Context](services/c360Context.service.js) service to load a Configurator 360 model (either a new model or a saved model), you are given a javascript object representing the root part from your model.  This object contains a property for each child part, a property for each model property, and a function for each action (e.g. downloading drawings).  Each of the child parts contains all of this functionality as well -- all the way down the hierarchy.  This allows you to interact with your entire C360 model on the client side using javascript.
 
 ### Installing
 
