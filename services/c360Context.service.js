@@ -29,6 +29,7 @@
             var _invalidCharacterPattern = /[\s\%\/\?\)\(\.\']/g;
             var _manager = new breeze.EntityManager();
             var _viewer = null;
+            var _lastError = null;
             // TODO: Store viewer div id in constant?
             var _viewerDivId = 'c360Viewer';
 
@@ -46,6 +47,7 @@
                 getPartByRefChain: getPartByRefChain,
                 getPartByUiProp: getPartByUiProp,
                 updateProperty: updateProperty,
+                updateProperties: updateProperties,
                 resetProperty: resetProperty,
                 executeAction: executeAction,
                 endSession: endSession,
@@ -53,7 +55,8 @@
                 setDirty: setDirty,
                 isModelLoaded: isModelLoaded,
                 setModelAdapter: setModelAdapter,
-                getViewer: function () { return _viewer; }
+                getViewer: function () { return _viewer; },
+                getLastError: function () { return _lastError; }
             };
 
             return service;
@@ -116,6 +119,30 @@
                         }
                     ]
                 }, onSuccess, onError);
+
+                return deferred.promise;
+
+                function onSuccess(modelData) {
+                    updateModel(modelData);
+                    setDirty(true);
+                    deferred.resolve();
+                }
+
+                function onError(error) {
+                    $log.error('', 'Error updating property');
+                    handleError(error);
+                    deferred.reject();
+                }
+            }
+
+            function updateProperties(properties) {
+                _updateInProgress = true;
+
+                var deferred = $q.defer();
+
+                $rootScope.$broadcast('C360ModelUpdating', { promise: deferred.promise });
+
+                _viewer.setPropertyValues(properties, onSuccess, onError);
 
                 return deferred.promise;
 
@@ -270,6 +297,7 @@
                     if (result.compatible) {
                         C360.initViewer(viewerOptions);
                     } else {
+                        _lastError = result.reason;
                         deferred.reject(result.reason);
                     }
                 });
@@ -283,14 +311,17 @@
                     });
                 }
 
-                function failedToLoad(result) {
-                    deferred.reject(result);
+                function failedToLoad(viewer) {
+                    _viewer = viewer;
+                    deferred.reject(viewer.state);
                 }
 
                 return deferred.promise;
             }
 
             function updateModel(modelData) {
+                _lastError = null;
+
                 // Updated the entity manager with new/updated entities
                 mergePart(modelData, modelData.parentRefChain);
 
