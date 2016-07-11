@@ -22,6 +22,6 @@
     "report": "./report/",
     "build": "./build/",
     "temp": "./temp/",
-    "deployjs": "C:\\Projects\\D3 ETO Samples\\angular-c360-sample\\src\\angular-c360-sample\\wwwroot\\lib\\angular-c360",
-    "deploycontent": "C:\\Projects\\D3 ETO Samples\\angular-c360-sample\\src\\angular-c360-sample\\wwwroot\\lib\\angular-c360"
+    "deployjs": "C:\\Projects\\c360\\angular-c360-sample\\bower_components\\angular-c360",
+    "deploycontent": "C:\\Projects\\c360\\angular-c360-sample\\bower_components\\angular-c360"
 }

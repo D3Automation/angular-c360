@@ -21,10 +21,10 @@
 
             // Add all of these attributes unconditionally
             elem.addClass('c360-prop');
-            elem.attr('ng-model', prop + '.BoundValue');
-            elem.attr('ng-class', '{ \'c360-modified\': ' + prop + '.IsModified, \'c360-invalid\': ' + prop + '.ErrorInfo }');
-            elem.attr('ng-disabled', prop + '.IsReadOnly');
-            elem.attr('tooltip', '{{' + prop + '.Tooltip}}');
+            elem.attr('ng-model', prop + '.value');
+            elem.attr('ng-class', '{ \'c360-modified\': ' + prop + '.isModified, \'c360-invalid\': ' + prop + '.errorInfo }');
+            elem.attr('ng-disabled', prop + '.isReadOnly');
+            elem.attr('tooltip', '{{' + prop + '.tooltip}}');
             elem.attr('tooltip-popup-delay', '1000');
 
             // Add the remaining attributes only if they're not already set, so that they
@@ -39,7 +39,7 @@
             }
 
             if (elem[0].nodeName === 'SELECT' && !angular.isDefined(elem.attr('ng-options'))) {
-                elem.attr('ng-options', 'choice.value as choice.text for choice in ' + prop + '.ChoiceList');
+                elem.attr('ng-options', 'choice.value as choice.text for choice in ' + prop + '.choiceList');
             }
 
             return {

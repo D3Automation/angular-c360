@@ -14,17 +14,17 @@
                 shortName: 'UIPart',
                 namespace: 'C360',
                 dataProperties: {
-                    RefChain: {dataType: DT.String, isPartOfKey: true},
-                    Name: {dataType: DT.String},
-                    PartType: {dataType: DT.String},
-                    ParentRefChain: { dataType: DT.String }
+                    refChain: {dataType: DT.String, isPartOfKey: true},
+                    name: {dataType: DT.String},
+                    partType: {dataType: DT.String},
+                    parentRefChain: { dataType: DT.String }
                 },
                 navigationProperties: {
-                    Parent: {
+                    parent: {
                         entityTypeName: 'UIPart:#C360', isScalar: true,
-                        associationName: 'UIPart_UIPart', foreignKeyNames: ['ParentRefChain']
+                        associationName: 'UIPart_UIPart', foreignKeyNames: ['parentRefChain']
                     },
-                    Children: {
+                    children: {
                         entityTypeName: 'UIPart:#C360', isScalar: false,
                         associationName: 'UIPart_UIPart'
                     }
