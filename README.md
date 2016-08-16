@@ -23,7 +23,7 @@ A live sample application can be found [here](https://d3automation.github.io/ang
 The source code for this sample is in its [own repository](https://github.com/D3Automation/angular-c360-sample), along with instructions for running the sample locally. 
 
 ## Dependencies
-* [Angular](https://angular.io/)
+* [Angular](https://angularjs.org/)
 * [BreezeJS](http://breeze.github.io/doc-js/)
 
 ## Installation
