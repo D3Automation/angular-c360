@@ -61,207 +61,219 @@ app.config(['c360ContextProvider', function (c360ContextProvider) {
 
 ## Common Usage
 _Note: Code samples shown below adhere to the [Angular 1 Style Guide](https://github.com/johnpapa/angular-styleguide/blob/master/a1/README.md) from John Papa._
+
 ### Loading Model
-    * In your desired controller, inject `c360Context`.
-    * Run `c360Context.getNewModel()` which returns a promise containing the root part.
-    * Example:
+* In your desired controller, inject `c360Context`.
+* Run `c360Context.getNewModel()` which returns a promise containing the root part.
 
-    ```javascript
-    (function () {
-        'use strict';
+Example:
+```javascript
+(function () {
+    'use strict';
 
-        angular.module('app')
-            .controller('MyController', MyController);
+    angular.module('app')
+        .controller('MyController', MyController);
 
-        /* @ngInject */
-        function MyController(c360Context) {
-            var vm = this;
+    /* @ngInject */
+    function MyController(c360Context) {
+        var vm = this;
 
-            vm.rootPart = undefined;
+        vm.rootPart = undefined;
 
-            activate();
+        activate();
 
-            function activate() {
-                c360Context.getNewModel()
-                    .then(function (root) {
-                        vm.rootPart = root;
-                    })
-                    .catch(function () {
-                        alert('error');
-                    });
-            }
+        function activate() {
+            c360Context.getNewModel()
+                .then(function (root) {
+                    vm.rootPart = root;
+                })
+                .catch(function () {
+                    alert('error');
+                });
         }
-    })();        
-    ```
+    }
+})();        
+```
 ### Binding properties to HTML Elements
-    * C360 properties can be bound to specific HTML elements using the provided [`c360-prop`](directives/c360Prop.directive.js) directive. This directive sets attributes on the HTML Element automatically to control [`ng-model`](https://docs.angularjs.org/api/ng/directive/ngModel), [`ng-class`](https://docs.angularjs.org/api/ng/directive/ngClass), [`ng-disabled`](https://docs.angularjs.org/api/ng/directive/ngDisabled), and [`ng-model-options`](https://docs.angularjs.org/api/ng/directive/ngModelOptions) all based on the definition of the specified c360 property.  Additionally, for `input` elements, it sets the `type` attribute, and for `select` elements, it populates the list of options.
-    * For example:
-    ```
-    <input c360-prop="vm.rootPart.Foo"/>
-    ``` 
-    Will expand to something similar to (formatted for readability): 
-    ```html
-    <input 
-        class="c360-prop ng-pristine ng-valid ng-scope md-input ng-touched"
-        ng-model="vm.rootPart.Foo.value" 
-        ng-class="{ 'c360-modified': vm.rootPart.Foo.isModified, 
-            'c360-invalid': vm.rootPart.Foo.errorInfo }" ng-disabled="vm.rootPart.Foo.isReadOnly" 
-        tooltip="" 
-        tooltip-popup-delay="1000" 
-        ng-model-options="{ updateOn: vm.rootPart.Foo.updateOn }" 
-        type="text" 
-        aria-disabled="false" 
-        aria-invalid="false"
-    >
-    ```
-    It is not required to use the `c360-prop` directive to bind to properties.  Any or all of the HTML shown above could be used instead (the `ng-model` binding being the most important) and tweaked for your specific needs.  If this type
-    of customization is needed, it probably makes sense to encapsulate the HTML into a [custom directive](https://docs.angularjs.org/guide/directive) (see below under [Advanced Usage](#advanced-usage)).
+C360 properties can be bound to specific HTML elements using the provided [`c360-prop`](directives/c360Prop.directive.js) directive. This directive sets attributes on the HTML Element automatically to control [`ng-model`](https://docs.angularjs.org/api/ng/directive/ngModel), [`ng-class`](https://docs.angularjs.org/api/ng/directive/ngClass), [`ng-disabled`](https://docs.angularjs.org/api/ng/directive/ngDisabled), and [`ng-model-options`](https://docs.angularjs.org/api/ng/directive/ngModelOptions) all based on the definition of the specified c360 property.  Additionally, for `input` elements, it sets the `type` attribute, and for `select` elements, it populates the list of options.
+
+For example:
+```
+<input c360-prop="vm.rootPart.Foo"/>
+``` 
+Will expand to something similar to (formatted for readability): 
+```html
+<input 
+    class="c360-prop ng-pristine ng-valid ng-scope md-input ng-touched"
+    ng-model="vm.rootPart.Foo.value" 
+    ng-class="{ 'c360-modified': vm.rootPart.Foo.isModified, 
+        'c360-invalid': vm.rootPart.Foo.errorInfo }" ng-disabled="vm.rootPart.Foo.isReadOnly" 
+    tooltip="" 
+    tooltip-popup-delay="1000" 
+    ng-model-options="{ updateOn: vm.rootPart.Foo.updateOn }" 
+    type="text" 
+    aria-disabled="false" 
+    aria-invalid="false"
+>
+```
+It is not required to use the `c360-prop` directive to bind to properties.  Any or all of the HTML shown above could be used instead (the `ng-model` binding being the most important) and tweaked for your specific needs.  If this type
+of customization is needed, it probably makes sense to encapsulate the HTML into a [custom directive](https://docs.angularjs.org/guide/directive) (see below under [Advanced Usage](#advanced-usage)).
+
 ### Executing Actions (e.g. downloading drawings)
-    * As mentioned above, all actions defined on a given part in your C360 model are availabe in the client-side model as functions on that part
-    * Executing an action is as simple as calling one of those functions.  The simplest way to do this is through an [`ng-click`](https://docs.angularjs.org/api/ng/directive/ngClick) binding:
-        ```html
-        <button ng-click="vm.rootPart.CreateDrawingDWG()">Download DWG</button>
-        ```
+As mentioned above, all actions defined on a given part in your C360 model are availabe in the client-side model as functions on that part.  Executing an action is as simple as calling one of those functions.  The simplest way to do this is through an [`ng-click`](https://docs.angularjs.org/api/ng/directive/ngClick) binding:
+
+```html
+<button ng-click="vm.rootPart.CreateDrawingDWG()">Download DWG</button>
+```
+
 ### Graphics
-    * Adding the graphics viewer is as simple as adding a viewer element:
+Adding the graphics viewer is as simple as adding a viewer element:
     
-    ```html
-    <c360-viewer></c360-viewer>
-    ```  
+```html
+<c360-viewer></c360-viewer>
+```  
     
-    * There is no interactibility with the actual viewer, it's just plug and play.
+There is no interactibility with the actual viewer, it's just plug and play.
 
 ## Advanced Usage
 ### Custom Directives 
-    * [Custom directives](https://docs.angularjs.org/guide/directive) can be used to encapsulate a custom HTML template (and additional logic if needed), which can then be used within your application just like a standard HTML element.
-    * An example of this can be found in the [`c360-md-prop`](https://github.com/D3Automation/angular-c360-sample/blob/master/app/common/c360MdProp.html) directive within the **angular-c360** Sample App.
-        * It provides the following functionality:
-            * Dynamically chooses between a text input, checkbox input, or dropdown based on the property definition
-            * Displays a label populated with the property's base name (can be overridden with a prop-name attribute)
-            * Provides a button to reset a property to its default value if it has been modified
-        * It can be used as follows:
-        ```html
-        <c360-md-prop ui-prop="vm.rootPart.Foo"></c360-md-prop>
-        ```
+[Custom directives](https://docs.angularjs.org/guide/directive) can be used to encapsulate a custom HTML template (and additional logic if needed), which can then be used within your application just like a standard HTML element.
+
+An example of this can be found in the [`c360-md-prop`](https://github.com/D3Automation/angular-c360-sample/blob/master/app/common/c360MdProp.html) directive within the **angular-c360** Sample App.  It provides the following functionality:
+* Dynamically chooses between a text input, checkbox input, or dropdown based on the property definition
+* Displays a label populated with the property's base name (can be overridden with a prop-name attribute)
+* Provides a button to reset a property to its default value if it has been modified
+
+It can be used as follows:
+```html
+<c360-md-prop ui-prop="vm.rootPart.Foo"></c360-md-prop>
+```
 
 ### Get Part By Refchain
-    ```
-    c360Context.getPartByRefChain('Root.Foo.Bar')
-    ``` 
-    * This returns the UIPart at the given refChain, in this case, the UIPart `Bar` which is a child of `Foo`
+```
+c360Context.getPartByRefChain('Root.Foo.Bar')
+``` 
+
+This returns the UIPart at the given refChain, in this case, the UIPart `Bar` which is a child of `Foo`
 
 ### Interacting With Model in Javascript
-    * Once you have a reference to a part within your controller (see above for how to get root part and/or get a specific part by Refchain), you can evaluate/set properties and execute actions
-    on parts anywhere in the model hierarchy 
-    * Evaluating / Setting Properties
-        * Assuming you already have a variable named `rootPart` that references the root part of your model, the following code will evaluate (and potentially set) a property on a child part:
-        ```javascript   
-        if (rootPart.SomeChild.SomeGrandchild.PartNumber.value !== null) {
-            alert('The part number is ' + rootPart.SomeChild.SomeGrandchild.PartNumber.value);
-        } else {
-            rootPart.SomeChild.SomeGrandchild.PartNumber.value = 'PT-15';
-        }
-        ```
-        * In the above example, the code sets the PartNumber property if it is not already set.  However, since this is an asynchronous call to the server (which returns a promise), any code after the property is set
-        will execute immediately rather than waiting on the update to finish.  In order to add code after the asynchronous call, the following approach can be used:
-        ```javascript
-        c360Context.updateProperty('Root.SomeChild.SomeGrandchild', 'uiPartNumber', 'PT-15')
-            .then(function() {
-                alert('The PartNumber property was successfully set');
-            })
-            .error(function() {
-                alert('An error occurred while setting the PartNumber property');
-            });
-        ```
-    * Evalating other attributes of the C360 property object 
-        * There are many more properties on the object created from the UIProperty, including choiceList, dataType, uiRuleName and more. For more, you can reference the [uiProperty.js](https://github.com/D3Automation/angular-c360/blob/master/common/uiProperty.js) file.    
-    * Executing Actions
-        * Actions appear as functions on rootPart and all its children, all the way down the heirarchy, so they can be called just like calling any existing javascript function
-        * Here is an example of executing an action within a controller:
-        ```javascript
-        (function () {
-            'use strict';
+Once you have a reference to a part within your controller (see above for how to get root part and/or get a specific part by Refchain), you can evaluate/set properties and execute actions on parts anywhere in the model hierarchy.
 
-            angular.module('app')
-                .controller('MyController', MyController);
+#### Evaluating / Setting Properties
 
-            /* @ngInject */
-            function MyController(c360Context) {
-                var vm = this;
+Assuming you already have a variable named `rootPart` that references the root part of your model, the following code will evaluate (and potentially set) a property on a child part:
+```javascript   
+if (rootPart.SomeChild.SomeGrandchild.PartNumber.value !== null) {
+    alert('The part number is ' + rootPart.SomeChild.SomeGrandchild.PartNumber.value);
+} else {
+    rootPart.SomeChild.SomeGrandchild.PartNumber.value = 'PT-15';
+}
+```
 
-                vm.rootPart = undefined;
-                vm.downloadDrawings = downloadDrawings;
+In the above example, the code sets the PartNumber property if it is not already set.  However, since this is an asynchronous call to the server (which returns a promise), any code after the property is set will execute immediately rather than waiting on the update to finish.  In order to add code after the asynchronous call, the following approach can be used:
 
-                activate();
-
-                function activate() {
-                    c360Context.getNewModel()
-                        .then(function (root) {
-                            return root;
-                        })
-                        .catch(function () {
-                            alert('error');
-                        });
-                }
-
-                function downloadDrawings() {
-                    // Add some other logic here before calling the action, if needed
-                                         
-                    vm.rootPart.CreateDrawingDWG()
-                        .then(function() {
-                            // The action returns a promise, so put any logic here
-                            //  that you would like to execute after the action completes
-                        });
-                }
-            }
-        })();        
-        ```           
-### Custom Model Adapter
-    * When the client-side model is updated after each call to the server, we have the ability to affect how the model is created
-    * A model adapter object is used for processing the model (the default model adapter can be found in [c360Context.service.js](https://github.com/D3Automation/angular-c360/blob/master/services/c360Context.service.js))
-    * By creating a custom model adapter, we can override the logic used for the following:
-        * **Replacing invalid characters in property names** - The base name for a property in a C360 model can contain characters that are not valid in property names in javascript
-            * For example, a property in C360 might be named "Scrap %".  Neither the space nor the % can be used in a javascript property name, so they need to be replaced when the client-side model is created.
-        * **Executing custom javascript for every part that is returned from the server**
-            * One example would be to log some information about each part
-            * Another example is to actually modify some of the parts in some way in order to facilitate some special logic in the UI
-    * Here is an example of a custom model adapter that does overrides both pieces of functionality (however, one could be created that only overrides one or the other):
-    ```javascript
-    var customAdapter = {
-        visitPart: function(part) {
-            // Log the part's refChain
-            console.log(part.refChain);
-
-            // Add a special property that we'll use in some UI logic
-            if (part.partType === 'Foo') {
-                part.templateUrl = 'app/foo/foo.html';
-            } else {
-                part.templateUrl = 'app/common/bar.html';
-            }
-        },
-        invalidCharacterReplacement = '_',
-    };
-
-    var app = angular.module('app');
-    app.run(function(c360Context)  {
-        c360Context.setModelAdapter(customAdapter);
+```javascript
+c360Context.updateProperty('Root.SomeChild.SomeGrandchild', 'uiPartNumber', 'PT-15')
+    .then(function() {
+        alert('The PartNumber property was successfully set');
+    })
+    .error(function() {
+        alert('An error occurred while setting the PartNumber property');
     });
-    
-    ```
+```
+
+#### Evalating other attributes of the C360 property object 
+There are many more properties on the object created from the UIProperty, including choiceList, dataType, uiRuleName and more. For more, you can reference the [uiProperty.js](https://github.com/D3Automation/angular-c360/blob/master/common/uiProperty.js) file.    
+
+#### Executing Actions
+Actions appear as functions on rootPart and all its children, all the way down the heirarchy, so they can be called just like calling any existing javascript function.
+
+Here is an example of executing an action within a controller:
+```javascript
+(function () {
+    'use strict';
+
+    angular.module('app')
+        .controller('MyController', MyController);
+
+    /* @ngInject */
+    function MyController(c360Context) {
+        var vm = this;
+
+        vm.rootPart = undefined;
+        vm.downloadDrawings = downloadDrawings;
+
+        activate();
+
+        function activate() {
+            c360Context.getNewModel()
+                .then(function (root) {
+                    return root;
+                })
+                .catch(function () {
+                    alert('error');
+                });
+        }
+
+        function downloadDrawings() {
+            // Add some other logic here before calling the action, if needed
+                                 
+            vm.rootPart.CreateDrawingDWG()
+                .then(function() {
+                    // The action returns a promise, so put any logic here
+                    //  that you would like to execute after the action completes
+                });
+        }
+    }
+})();        
+```           
+
+### Custom Model Adapter
+When the client-side model is updated after each call to the server, we have the ability to affect how the model is created by using a model adapter object.  The default model adapter can be found in [c360Context.service.js](https://github.com/D3Automation/angular-c360/blob/master/services/c360Context.service.js))
+
+By creating a custom model adapter, we can override the logic used for the following:
+* **Replacing invalid characters in property names** - The base name for a property in a C360 model can contain characters that are not valid in property names in javascript
+    * For example, a property in C360 might be named "Scrap %".  Neither the space nor the % can be used in a javascript property name, so they need to be replaced when the client-side model is created.
+* **Executing custom javascript for every part that is returned from the server**
+    * One example would be to log some information about each part
+    * Another example is to actually modify some of the parts in some way in order to facilitate some special logic in the UI
+
+Here is an example of a custom model adapter that does overrides both pieces of functionality (however, one could be created that only overrides one or the other):
+```javascript
+var customAdapter = {
+    visitPart: function(part) {
+        // Log the part's refChain
+        console.log(part.refChain);
+
+        // Add a special property that we'll use in some UI logic
+        if (part.partType === 'Foo') {
+            part.templateUrl = 'app/foo/foo.html';
+        } else {
+            part.templateUrl = 'app/common/bar.html';
+        }
+    },
+    invalidCharacterReplacement = '_',
+};
+
+var app = angular.module('app');
+app.run(function(c360Context)  {
+    c360Context.setModelAdapter(customAdapter);
+});
+
+```
+
 ### Accessing the C360 viewer object directly
-    * With **angular-c360**, we have exposed and streamlined a set of functions we think should give you the ability to do almost everything needed in typical usage scenarios. All of this functionality exists on the `c360Context` service. For anything else, you can directly retrieve the viewer object (`c360Context.getViewer()`), and you'll have complete access to the functionality provided by C360.
-    * [Autodesk documentation for C360 Viewer](http://help.autodesk.com/view/CFG360/ENU/?guid=GUID-82310904-D89F-46B6-A1D2-8E5F07333DA3) 
+With **angular-c360**, we have exposed and streamlined a set of functions we think should give you the ability to do almost everything needed in typical usage scenarios. All of this functionality exists on the `c360Context` service. For anything else, you can directly retrieve the viewer object (`c360Context.getViewer()`), and you'll have complete access to the functionality provided by C360.
+
+[Autodesk documentation for C360 Viewer](http://help.autodesk.com/view/CFG360/ENU/?guid=GUID-82310904-D89F-46B6-A1D2-8E5F07333DA3) 
 
 ## Versioning
-
 We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/D3Automation/angular-c360/tags). 
 
 ## Authors
-
 * [D3 Automation](http://d3tech.net/solutions/automation/)
 
 See also the list of [contributors](https://github.com/D3Automation/angular-c360/contributors) who participated in this project.
 
 ## License
-
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
