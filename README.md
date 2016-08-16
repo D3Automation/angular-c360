@@ -95,7 +95,7 @@ Example:
 })();        
 ```
 ### Binding properties to HTML Elements
-C360 properties can be bound to specific HTML elements using the provided [`c360-prop`](directives/c360Prop.directive.js) directive. This directive sets attributes on the HTML Element automatically to control [`ng-model`](https://docs.angularjs.org/api/ng/directive/ngModel), [`ng-class`](https://docs.angularjs.org/api/ng/directive/ngClass), [`ng-disabled`](https://docs.angularjs.org/api/ng/directive/ngDisabled), and [`ng-model-options`](https://docs.angularjs.org/api/ng/directive/ngModelOptions) all based on the definition of the specified c360 property.  Additionally, for `input` elements, it sets the `type` attribute, and for `select` elements, it populates the list of options.
+C360 properties can be bound to specific HTML elements using the provided [`c360-prop`](directives/c360Prop.directive.js) directive. This directive sets attributes on the HTML Element automatically to control [`ng-model`](https://docs.angularjs.org/api/ng/directive/ngModel), [`ng-class`](https://docs.angularjs.org/api/ng/directive/ngClass), [`ng-disabled`](https://docs.angularjs.org/api/ng/directive/ngDisabled), and [`ng-model-options`](https://docs.angularjs.org/api/ng/directive/ngModelOptions) -- all based on the definition of the specified c360 property.  Additionally, for `input` elements, it sets the `type` attribute, and for `select` elements, it populates the list of options.
 
 For example:
 ```
@@ -120,7 +120,7 @@ It is not required to use the `c360-prop` directive to bind to properties.  Any 
 of customization is needed, it probably makes sense to encapsulate the HTML into a [custom directive](https://docs.angularjs.org/guide/directive) (see below under [Advanced Usage](#advanced-usage)).
 
 ### Executing Actions (e.g. downloading drawings)
-As mentioned above, all actions defined on a given part in your C360 model are availabe in the client-side model as functions on that part.  Executing an action is as simple as calling one of those functions.  The simplest way to do this is through an [`ng-click`](https://docs.angularjs.org/api/ng/directive/ngClick) binding:
+As mentioned above, all actions defined on a given part in your C360 model are available in the client-side model as functions on that part.  Executing an action is as simple as calling one of those functions.  The simplest way to do this is through an [`ng-click`](https://docs.angularjs.org/api/ng/directive/ngClick) binding:
 
 ```html
 <button ng-click="vm.rootPart.CreateDrawingDWG()">Download DWG</button>
@@ -186,7 +186,7 @@ c360Context.updateProperty('Root.SomeChild.SomeGrandchild', 'uiPartNumber', 'PT-
 There are many more properties on the object created from the UIProperty, including choiceList, dataType, uiRuleName and more. For more, you can reference the [uiProperty.js](https://github.com/D3Automation/angular-c360/blob/master/common/uiProperty.js) file.    
 
 #### Executing Actions
-Actions appear as functions on rootPart and all its children, all the way down the heirarchy, so they can be called just like calling any existing javascript function.
+Actions appear as functions on rootPart and all its children, all the way down the hierarchy, so they can be called just like calling any existing javascript function.
 
 Here is an example of executing an action within a controller:
 ```javascript
@@ -229,10 +229,11 @@ Here is an example of executing an action within a controller:
 ```           
 
 ### Custom Model Adapter
-When the client-side model is updated after each call to the server, we have the ability to affect how the model is created by using a model adapter object.  The default model adapter can be found in [c360Context.service.js](https://github.com/D3Automation/angular-c360/blob/master/services/c360Context.service.js))
+When the client-side model is updated after each call to the server, we have the ability to affect how the model is created by using a model adapter object.  The default model adapter can be found in [c360Context.service.js](https://github.com/D3Automation/angular-c360/blob/master/services/c360Context.service.js).
 
 By creating a custom model adapter, we can override the logic used for the following:
-* **Replacing invalid characters in property names** - The base name for a property in a C360 model can contain characters that are not valid in property names in javascript
+* **Replacing invalid characters in property names**
+    * The base name for a property in a C360 model can contain characters that are not valid in property names in javascript
     * For example, a property in C360 might be named "Scrap %".  Neither the space nor the % can be used in a javascript property name, so they need to be replaced when the client-side model is created.
 * **Executing custom javascript for every part that is returned from the server**
     * One example would be to log some information about each part
