@@ -45,11 +45,11 @@ _Note: Assumes that the scripts for Angular iteslf have already been added_
 
 #### Register angular-c360 module in your application
 ```javascript
-angular.module('myApp', ['angular-c360']);
+angular.module('app', ['angular-c360']);
 ```
 
 #### Set design key
-In order for angular-c360 to know which design to use, we have to set the design key on c360ContextProvider when our application starts up.  The design key is the unique identifier for your design within C360 (i.e. all text to the right of the "https://configurator360.autodesk.com/" text in your C360 design URL).  The best place to set the design key is witin a [configuration block](https://docs.angularjs.org/guide/module):
+In order for angular-c360 to know which design to use, we have to set the design key on c360ContextProvider when our application starts up.  The design key is the unique identifier for your design within C360 (i.e. all text to the right of the "https://configurator360.autodesk.com/" text in your C360 design URL).  The best place to set the design key is within a [configuration block](https://docs.angularjs.org/guide/module):
 ```javascript
 var app = angular.module('app');
 
@@ -61,7 +61,7 @@ app.config(['c360ContextProvider', function (c360ContextProvider) {
 
 ## Common Usage
 _Note: Code samples shown below adhere to the [Angular 1 Style Guide](https://github.com/johnpapa/angular-styleguide/blob/master/a1/README.md) from John Papa._
-* Loading Model
+### Loading Model
     * In your desired controller, inject `c360Context`.
     * Run `c360Context.getNewModel()` which returns a promise containing the root part.
     * Example:
@@ -84,7 +84,7 @@ _Note: Code samples shown below adhere to the [Angular 1 Style Guide](https://gi
             function activate() {
                 c360Context.getNewModel()
                     .then(function (root) {
-                        return root;
+                        vm.rootPart = root;
                     })
                     .catch(function () {
                         alert('error');
@@ -93,7 +93,7 @@ _Note: Code samples shown below adhere to the [Angular 1 Style Guide](https://gi
         }
     })();        
     ```
-* Binding properties to HTML Elements
+### Binding properties to HTML Elements
     * C360 properties can be bound to specific HTML elements using the provided [`c360-prop`](directives/c360Prop.directive.js) directive. This directive sets attributes on the HTML Element automatically to control [`ng-model`](https://docs.angularjs.org/api/ng/directive/ngModel), [`ng-class`](https://docs.angularjs.org/api/ng/directive/ngClass), [`ng-disabled`](https://docs.angularjs.org/api/ng/directive/ngDisabled), and [`ng-model-options`](https://docs.angularjs.org/api/ng/directive/ngModelOptions) all based on the definition of the specified c360 property.  Additionally, for `input` elements, it sets the `type` attribute, and for `select` elements, it populates the list of options.
     * For example:
     ```
@@ -115,14 +115,14 @@ _Note: Code samples shown below adhere to the [Angular 1 Style Guide](https://gi
     >
     ```
     It is not required to use the `c360-prop` directive to bind to properties.  Any or all of the HTML shown above could be used instead (the `ng-model` binding being the most important) and tweaked for your specific needs.  If this type
-    of customization is needed, it probably makes sense to encapsulate the HTML into a [custom directive](https://docs.angularjs.org/guide/directive) (see below under Advanced Usage).
-* Executing Actions (e.g. downloading drawings)
+    of customization is needed, it probably makes sense to encapsulate the HTML into a [custom directive](https://docs.angularjs.org/guide/directive) (see below under [Advanced Usage](#advanced-usage)).
+### Executing Actions (e.g. downloading drawings)
     * As mentioned above, all actions defined on a given part in your C360 model are availabe in the client-side model as functions on that part
     * Executing an action is as simple as calling one of those functions.  The simplest way to do this is through an [`ng-click`](https://docs.angularjs.org/api/ng/directive/ngClick) binding:
         ```html
         <button ng-click="vm.rootPart.CreateDrawingDWG()">Download DWG</button>
         ```
-* Graphics
+### Graphics
     * Adding the graphics viewer is as simple as adding a viewer element:
     
     ```html
@@ -132,7 +132,7 @@ _Note: Code samples shown below adhere to the [Angular 1 Style Guide](https://gi
     * There is no interactibility with the actual viewer, it's just plug and play.
 
 ## Advanced Usage
-* Custom Directives 
+### Custom Directives 
     * [Custom directives](https://docs.angularjs.org/guide/directive) can be used to encapsulate a custom HTML template (and additional logic if needed), which can then be used within your application just like a standard HTML element.
     * An example of this can be found in the [`c360-md-prop`](https://github.com/D3Automation/angular-c360-sample/blob/master/app/common/c360MdProp.html) directive within the **angular-c360** Sample App.
         * It provides the following functionality:
@@ -144,13 +144,13 @@ _Note: Code samples shown below adhere to the [Angular 1 Style Guide](https://gi
         <c360-md-prop ui-prop="vm.rootPart.Foo"></c360-md-prop>
         ```
 
-* Get Part By Refchain
+### Get Part By Refchain
     ```
     c360Context.getPartByRefChain('Root.Foo.Bar')
     ``` 
     * This returns the UIPart at the given refChain, in this case, the UIPart `Bar` which is a child of `Foo`
 
-* Interacting With Model in Javascript
+### Interacting With Model in Javascript
     * Once you have a reference to a part within your controller (see above for how to get root part and/or get a specific part by Refchain), you can evaluate/set properties and execute actions
     on parts anywhere in the model hierarchy 
     * Evaluating / Setting Properties
@@ -216,7 +216,7 @@ _Note: Code samples shown below adhere to the [Angular 1 Style Guide](https://gi
             }
         })();        
         ```           
-* Custom Model Adapter
+### Custom Model Adapter
     * When the client-side model is updated after each call to the server, we have the ability to affect how the model is created
     * A model adapter object is used for processing the model (the default model adapter can be found in [c360Context.service.js](https://github.com/D3Automation/angular-c360/blob/master/services/c360Context.service.js))
     * By creating a custom model adapter, we can override the logic used for the following:
@@ -248,7 +248,7 @@ _Note: Code samples shown below adhere to the [Angular 1 Style Guide](https://gi
     });
     
     ```
-* Accessing the C360 viewer object directly
+### Accessing the C360 viewer object directly
     * With **angular-c360**, we have exposed and streamlined a set of functions we think should give you the ability to do almost everything needed in typical usage scenarios. All of this functionality exists on the `c360Context` service. For anything else, you can directly retrieve the viewer object (`c360Context.getViewer()`), and you'll have complete access to the functionality provided by C360.
     * [Autodesk documentation for C360 Viewer](http://help.autodesk.com/view/CFG360/ENU/?guid=GUID-82310904-D89F-46B6-A1D2-8E5F07333DA3) 
 
