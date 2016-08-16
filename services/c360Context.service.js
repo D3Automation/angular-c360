@@ -45,7 +45,6 @@
                 getRoot: getRoot,
                 getParts: getParts,
                 getPartByRefChain: getPartByRefChain,
-                getPartByUiProp: getPartByUiProp,
                 updateProperty: updateProperty,
                 updateProperties: updateProperties,
                 resetProperty: resetProperty,
@@ -81,26 +80,6 @@
 
             function getPartByRefChain(refChain) {
                 return _manager.getEntityByKey('UIPart', refChain);
-            }
-
-            function getPartByUiProp(partType, propName, propValue) {
-                var part = null;
-
-                // Use breeze to filter down to just parts of the correct type
-                var query = breeze.EntityQuery
-                    .from('UIParts')
-                    .toType('UIPart')
-                    .where('PartType', '==', partType);
-                var partsOfType = _manager.executeQueryLocally(query);
-
-                // Now filter to just the parts that match the UiProp
-                var matchingParts = partsOfType.filter(function (p) { return p[propName] === propValue; })
-
-                if (matchingParts.length > 0) {
-                    part = matchingParts[0];
-                }
-
-                return part;
             }
 
             function updateProperty(refChain, name, value) {
