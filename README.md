@@ -17,6 +17,7 @@ is automatically sent to the server, and any resultant changes (dependent proper
 * [Authors](#authors)
 * [License](#license)
 * [API](API.md)
+
 ## Demo
 A live sample application can be found [here](https://d3automation.github.io/angular-c360-sample/).
 The source code for this sample is in its [own repository](https://github.com/D3Automation/angular-c360-sample), along with instructions for running the sample locally. 
