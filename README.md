@@ -8,11 +8,14 @@ Once the C360 model has been retrieved, the client-side model is automatically k
 is automatically sent to the server, and any resultant changes (dependent properties, addition/removal of children, etc.) are returned and incorporated into the client-side model.  
 
 ## Table of Contents
-* [Demo](#Demo)
-* [Dependencies](#Dependencies)
-* [Installation](#Installation)
-* [Common Usage](#Common-Usage)
-* [Advanced Usage](#Advanced-Usage)
+* [Demo](#demo)
+* [Dependencies](#dependencies)
+* [Installation](#installation)
+* [Common Usage](#common-usage)
+* [Advanced Usage](#advanced-usage)
+* [Versioning](#versioning)
+* [Authors](#authors)
+* [License](#license)
 * [API](API.md)
 ## Demo
 A live sample application can be found [here](https://d3automation.github.io/angular-c360-sample/).
@@ -247,3 +250,17 @@ _Note: Code samples shown below adhere to the [Angular 1 Style Guide](https://gi
 * Accessing the C360 viewer object directly
     * With **angular-c360**, we have exposed and streamlined a set of functions we think should give you the ability to do almost everything needed in typical usage scenarios. All of this functionality exists on the `c360Context` service. For anything else, you can directly retrieve the viewer object (`c360Context.getViewer()`), and you'll have complete access to the functionality provided by C360.
     * [Autodesk documentation for C360 Viewer](http://help.autodesk.com/view/CFG360/ENU/?guid=GUID-82310904-D89F-46B6-A1D2-8E5F07333DA3) 
+
+## Versioning
+
+We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/D3Automation/angular-c360/tags). 
+
+## Authors
+
+* [D3 Automation](http://d3tech.net/solutions/automation/)
+
+See also the list of [contributors](https://github.com/D3Automation/angular-c360/contributors) who participated in this project.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
