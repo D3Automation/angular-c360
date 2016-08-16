@@ -1,5 +1,6 @@
-c360Context - Brief summary of each function
+# c360Context
 
+## Functions
 * `endSession()`
     * Purpose
         * Closes the current model and ends C360 Session  
