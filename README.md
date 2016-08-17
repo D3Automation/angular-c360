@@ -235,11 +235,12 @@ By creating a custom model adapter, we can override the logic used for the follo
 * **Replacing invalid characters in property names**
     * The base name for a property in a C360 model can contain characters that are not valid in property names in javascript
     * For example, a property in C360 might be named "Scrap %".  Neither the space nor the % can be used in a javascript property name, so they need to be replaced when the client-side model is created.
+    * By default, an empty string will be used as the replacement
 * **Executing custom javascript for every part that is returned from the server**
     * One example would be to log some information about each part
     * Another example is to actually modify some of the parts in some way in order to facilitate some special logic in the UI
 
-Here is an example of a custom model adapter that does overrides both pieces of functionality (however, one could be created that only overrides one or the other):
+Here is an example of a custom model adapter that overrides both pieces of functionality (however, one could be created that only overrides one or the other):
 ```javascript
 var customAdapter = {
     visitPart: function(part) {
