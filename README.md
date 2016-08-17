@@ -40,6 +40,7 @@ _Note: Assumes that the scripts for Angular iteslf have already been added_
 ```html
 <link rel="stylesheet" href="bower_components/angular-c360/angular-c360.css" />
 <script src="bower_components/breeze-client/build/breeze.min.js"></script>
+<script src="bower_components/breeze-client/build/adapters/breeze.bridge.angular.js"></script>
 <script src="bower_components/angular-c360/angular-c360.min.js"></script>
 ```
 
