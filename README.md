@@ -13,6 +13,7 @@ is automatically sent to the server, and any resultant changes (dependent proper
 * [Installation](#installation)
 * [Common Usage](#common-usage)
 * [Advanced Usage](#advanced-usage)
+* [Inspecting Client-Side Model](#inspecting-client-side-model)
 * [Versioning](#versioning)
 * [Authors](#authors)
 * [License](#license)
@@ -269,6 +270,13 @@ app.run(function(c360Context)  {
 With **angular-c360**, we have exposed and streamlined a set of functions we think should give you the ability to do almost everything needed in typical usage scenarios. All of this functionality exists on the `c360Context` service. For anything else, you can directly retrieve the viewer object (`c360Context.getViewer()`), and you'll have complete access to the functionality provided by C360.
 
 [Autodesk documentation for C360 Viewer](http://help.autodesk.com/view/CFG360/ENU/?guid=GUID-82310904-D89F-46B6-A1D2-8E5F07333DA3) 
+
+## Inspecting Client-Side Model
+Once the client-side model has been created by `c360Context`, it is pretty handy to be able to inspect the model object.  This makes it easier to see what properties, children, and actions are available on each part without having to refer back to the C360 designs.  The simplest way to do this is from the console window in your browser's developer tools (F12).  You can evaluate the following statement to simultaneously get a reference to the c360Context service and ask it for a reference to the root part:
+
+```javascript
+angular.element(document.body).injector().get('c360Context').getRoot()
+```
 
 ## Versioning
 We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/D3Automation/angular-c360/tags). 
