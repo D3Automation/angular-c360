@@ -306,7 +306,7 @@ angular.element(document.body).injector().get('c360Context').getRoot()
 
 ## C360 Errors
 ### Resolving Error Name From Error Code
-If an error occurs while loading the model, the error code will be pass in to the `catch` method of the promise.  The error code can then be
+If an error occurs while loading the model, the error code will be passed in to the `catch` method of the promise.  The error code can then be
 compared to the [`ADSK.C360.loadedState`](http://help.autodesk.com/view/CFG360/ENU/?guid=GUID-1A1B61D7-0453-4B76-B0D2-E9D2F3107036) enumeration to
 determine the type of error.
 
