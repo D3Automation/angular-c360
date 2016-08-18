@@ -14,6 +14,7 @@ is automatically sent to the server, and any resultant changes (dependent proper
 * [Common Usage](#common-usage)
 * [Advanced Usage](#advanced-usage)
 * [Inspecting Client-Side Model](#inspecting-client-side-model)
+* [C360 Errors](#c360-errors)
 * [Versioning](#versioning)
 * [Authors](#authors)
 * [License](#license)
@@ -26,6 +27,7 @@ The source code for this sample is in its [own repository](https://github.com/D3
 ## Dependencies
 * [Angular](https://angularjs.org/)
 * [BreezeJS](http://breeze.github.io/doc-js/)
+* [jQuery](http://jquery.com/) (will be removed soon)
 
 ## Installation
 
@@ -39,10 +41,19 @@ bower install angular-c360 --save
 #### Add scripts and CSS to index.html (for both angular-c360 and its dependencies)
 _Note: Assumes that the scripts for Angular iteslf have already been added_
 ```html
+<!-- Note: If your project already includes jQuery, this is not needed -->
+<script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+<!-- Links to Angular should be here (after jQuery but before angular-c360 -->
+
+<!-- angular-c360 and its dependencies -->
 <link rel="stylesheet" href="bower_components/angular-c360/angular-c360.css" />
 <script src="bower_components/breeze-client/build/breeze.min.js"></script>
 <script src="bower_components/breeze-client/build/adapters/breeze.bridge.angular.js"></script>
 <script src="bower_components/angular-c360/angular-c360.min.js"></script>
+
+<!-- C360 scripts from Autodesk -->
+<script src="https://configurator360.autodesk.com/Script/v1/EmbeddedViewer"></script>
 ```
 
 #### Register angular-c360 module in your application
@@ -76,7 +87,8 @@ Example:
     angular.module('app')
         .controller('MyController', MyController);
 
-    /* @ngInject */
+    MyController.$inject = ['c360Context'];
+
     function MyController(c360Context) {
         var vm = this;
 
@@ -89,13 +101,20 @@ Example:
                 .then(function (root) {
                     vm.rootPart = root;
                 })
-                .catch(function () {
-                    alert('error');
+                .catch(function (error) {
+                    alert('Error': error);
                 });
         }
     }
 })();        
 ```
+
+Note that there are various ways of identifying dependencies that are being injected into your controller (e.g. `c360Context` above).  See
+[this section in John Papa's Angular 1 Style Guide](https://github.com/johnpapa/angular-styleguide/blob/master/a1/README.md#manual-annotating-for-dependency-injection) for
+additional details.
+
+See the [C360 Errors](#c360-errors) section below for details on error handling.
+
 ### Binding properties to HTML Elements
 C360 properties can be bound to specific HTML elements using the provided [`c360-prop`](directives/c360Prop.directive.js) directive. This directive sets attributes on the HTML Element automatically to control [`ng-model`](https://docs.angularjs.org/api/ng/directive/ngModel), [`ng-class`](https://docs.angularjs.org/api/ng/directive/ngClass), [`ng-disabled`](https://docs.angularjs.org/api/ng/directive/ngDisabled), and [`ng-model-options`](https://docs.angularjs.org/api/ng/directive/ngModelOptions) -- all based on the definition of the specified c360 property.  Additionally, for `input` elements, it sets the `type` attribute, and for `select` elements, it populates the list of options.
 
@@ -198,7 +217,8 @@ Here is an example of executing an action within a controller:
     angular.module('app')
         .controller('MyController', MyController);
 
-    /* @ngInject */
+    MyController.$inject = ['c360Context'];
+
     function MyController(c360Context) {
         var vm = this;
 
@@ -212,8 +232,8 @@ Here is an example of executing an action within a controller:
                 .then(function (root) {
                     return root;
                 })
-                .catch(function () {
-                    alert('error');
+                .catch(function (error) {
+                    alert('Error': error);
                 });
         }
 
@@ -228,7 +248,13 @@ Here is an example of executing an action within a controller:
         }
     }
 })();        
-```           
+```
+      
+Note that there are various ways of identifying dependencies that are being injected into your controller (e.g. `c360Context` above).  See
+[this section in John Papa's Angular 1 Style Guide](https://github.com/johnpapa/angular-styleguide/blob/master/a1/README.md#manual-annotating-for-dependency-injection) for
+additional details.
+
+See the [C360 Errors](#c360-errors) section below for details on error handling.
 
 ### Custom Model Adapter
 When the client-side model is updated after each call to the server, we have the ability to affect how the model is created by using a model adapter object.  The default model adapter can be found in [c360Context.service.js](https://github.com/D3Automation/angular-c360/blob/master/services/c360Context.service.js).
@@ -277,6 +303,25 @@ Once the client-side model has been created by `c360Context`, it is pretty handy
 ```javascript
 angular.element(document.body).injector().get('c360Context').getRoot()
 ```
+
+## C360 Errors
+### Resolving Error Name From Error Code
+If an error occurs while loading the model, the error code will be pass in to the `catch` method of the promise.  The error code can then be
+compared to the [`ADSK.C360.loadedState`](http://help.autodesk.com/view/CFG360/ENU/?guid=GUID-1A1B61D7-0453-4B76-B0D2-E9D2F3107036) enumeration to
+determine the type of error.
+
+### Common Errors
+#### ADSK.C360.loadedState.Forbidden (403)
+This error occurs when the URL for your site has not been added under the  **_Allow these authorized sites to embed configuration pages of my designs_** page under Options/Embedding for the C360 account
+that owns the design your application is configured to use.
+
+This will **_always_** occur if you are using **_localhost_** in your URL.  If your application is running on your local machine, you will
+need to use **http://127.0.0.1** rather than http://localhost.  You will also still need to add http://127.0.0.1 as an authorized site. 
+
+#### ADSK.C360.loadedState.DesignOpenInOtherWindowOrTab (12)
+This error occurs when you attempt to load a C360 design in a browser tab while you already have the same design opened in another tab of the same
+browser.  Due to the way C360 handles sessions, using a different browser altogether is the only way to use multiple instances of the same design
+simultaneously.
 
 ## Versioning
 We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/D3Automation/angular-c360/tags). 
