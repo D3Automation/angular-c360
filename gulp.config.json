@@ -22,6 +22,6 @@
     "report": "./report/",
     "build": "./build/",
     "temp": "./temp/",
-    "deployjs": "C:\\Projects\\Engenious\\AngularC360Sample\\bower_components\\angular-c360",
-    "deploycontent": "C:\\Projects\\Engenious\\AngularC360Sample\\bower_components\\angular-c360"
+    "deployjs": "C:\\temp\\AngularSeed\\app\\bower_components\\angular-c360",
+    "deploycontent": "C:\\temp\\AngularSeed\\app\\bower_components\\angular-c360"
 }

@@ -11,7 +11,7 @@
         return {
             restrict: 'E',
             link: function (scope, element, attrs, ctrl) {
-                var viewerElement = angular.element('#' + _viewerDivId);
+                var viewerElement = document.getElementById(_viewerDivId);
 
                 // Keep track of the component element in a service, so that we can use it in the IE11 $destroy hack below 
                 c360ViewerUtils.componentElement = element;
@@ -24,10 +24,11 @@
                     //  is happening after the viewer is created on the new view, so we need to make sure to only
                     //  return the 
                     if (c360ViewerUtils.componentElement === element) {
-                        viewerElement.offset({ top: 0, left: 0 });
+                        viewerElement.style.top = "0";
+                        viewerElement.style.left = "0";
                         // Use z-index rather than visibility to hide/show, since the viewer apparently
                         //  doesn't updated itself when hidden
-                        viewerElement.css('z-index', '-1');
+                        viewerElement.style.zIndex = "-1";
 
                         c360ViewerUtils.componentElement = undefined;
                     }
@@ -41,27 +42,20 @@
                 }, 100);
 
                 function positionViewer() {
+                    var widthPx = element[0].clientWidth + "px";
+                    var heightPx = element[0].clientHeight + "px";
+
                     // Use z-index rather than visibility to hide/show, since the viewer apparently
                     //  doesn't updated itself when hidden
-                    viewerElement.css('z-index', '1');
+                    viewerElement.style.zIndex = "1";
+                    viewerElement.style.top = element[0].offsetTop + "px";
+                    viewerElement.style.left = element[0].offsetLeft + "px";
+                    viewerElement.style.width = widthPx;
+                    viewerElement.style.height = heightPx;
 
-                    viewerElement.offset(element.offset());
-
-                    var width = element.width();
-                    var widthPx = width + 'px';
-                    var height = element.height();
-                    var heightPx = height + 'px';
-
-                    viewerElement.css('width', widthPx);
-                    viewerElement.css('height', heightPx);
-
-                    // Just setting the css would do it, but since c360 sets the width and height
-                    //  attributes on iframe, we'll set them here to in order to prevent any confusion
-                    var iFrame = angular.element(viewerElement.children()[0]);
-                    iFrame.css('width', widthPx);
-                    iFrame.width(width);
-                    iFrame.css('height', heightPx);
-                    iFrame.height(height);
+                    var iFrame = viewerElement.firstElementChild;
+                    iFrame.style.width = widthPx;
+                    iFrame.style.height = heightPx;
                 }
             }
         };
