@@ -44,18 +44,35 @@
                 function positionViewer() {
                     var widthPx = element[0].clientWidth + "px";
                     var heightPx = element[0].clientHeight + "px";
+                    var offset = calculateOffset(element[0]);
 
                     // Use z-index rather than visibility to hide/show, since the viewer apparently
                     //  doesn't updated itself when hidden
                     viewerElement.style.zIndex = "1";
-                    viewerElement.style.top = element[0].offsetTop + "px";
-                    viewerElement.style.left = element[0].offsetLeft + "px";
+                    viewerElement.style.top = offset.top + "px";
+                    viewerElement.style.left = offset.left + "px";
                     viewerElement.style.width = widthPx;
                     viewerElement.style.height = heightPx;
 
                     var iFrame = viewerElement.firstElementChild;
                     iFrame.style.width = widthPx;
                     iFrame.style.height = heightPx;
+
+                    function calculateOffset(el) {
+                        var parent = el.offsetParent;
+                        var offset = {
+                            top: el.offsetTop,
+                            left: el.offsetLeft
+                        };
+                        
+                        while(parent !== null) {
+                            offset.top += parent.offsetTop;
+                            offset.left += parent.offsetLeft;
+                            parent = parent.offsetParent;
+                        }
+
+                        return offset;
+                    }
                 }
             }
         };
