@@ -2,8 +2,8 @@ function UIProperty(c360Context, hostPart, adeskProp) {
     this.c360Context = c360Context;
     this.hostPart = hostPart;
     this.adeskProp = adeskProp;
-    this.parseChoiceList();
     this.parseTooltip();
+    this.parseChoiceList();
 }
 Object.defineProperty(UIProperty.prototype, "category", {
     get: function () {
@@ -56,13 +56,13 @@ Object.defineProperty(UIProperty.prototype, "fullName", {
 });
 Object.defineProperty(UIProperty.prototype, "inputType", {
     get: function () {
-        if (this.dataType === 'Date') {
+        if (this.dataType === 'date') {
             return 'date';
         }
-        else if (this.dataType === 'Boolean') {
+        else if (this.dataType === 'boolean') {
             return 'checkbox';
         }
-        else if (this.dataType === 'Integer' || this.dataType === 'Number') {
+        else if (this.dataType === 'integer' || this.dataType === 'number') {
             return 'number';
         }
         else {
@@ -149,18 +149,6 @@ Object.defineProperty(UIProperty.prototype, "uiRuleName", {
     enumerable: true,
     configurable: true
 });
-Object.defineProperty(UIProperty.prototype, "updateOn", {
-    get: function () {
-        if (this.isCheckbox || this.hasChoiceList) {
-            return 'default';
-        }
-        else {
-            return 'blur';
-        }
-    },
-    enumerable: true,
-    configurable: true
-});
 Object.defineProperty(UIProperty.prototype, "value", {
     get: function () {
         return this.adeskProp.Value;
@@ -184,8 +172,13 @@ UIProperty.prototype.reset = function () {
 };
 UIProperty.prototype.parseChoiceList = function () {
     if (this.adeskProp.ChoiceList) {
+        var prop = this;
+
         this.choiceListData = this.adeskProp.ChoiceList.map(function (choice) {
-            return { value: choice.DisplayString, text: choice.DisplayString };
+            return { 
+                value: prop.convertChoiceListValue(choice.DisplayString),
+                text: choice.DisplayString
+            };
         });
     }
 };
@@ -193,7 +186,7 @@ UIProperty.prototype.parseTooltip = function () {
     try {
         var toolTipObject = JSON.parse(this.adeskProp.Tooltip);
         this.toolTipValue = toolTipObject.ToolTip;
-        this.dataTypeValue = toolTipObject.DataType;
+        this.dataTypeValue = toolTipObject.DataType.toLowerCase();
         this.customDataValue = toolTipObject.CustomData;
     }
     catch (e) {
@@ -201,5 +194,27 @@ UIProperty.prototype.parseTooltip = function () {
     }
 };
 UIProperty.prototype.getDataTypeFromValue = function () {
-    return 'String';
+    if (typeof(this.value) === 'number') {
+        return "number"
+    } else if (this.value instanceof Date) {
+        return "date"
+    } else if (typeof(this.value) === 'boolean') {
+        return "boolean"
+    } else {
+        return "string";
+    }
+};
+UIProperty.prototype.convertChoiceListValue = function (itemValue) {
+    switch (this.dataType) {
+        case "string":
+            return itemValue;
+        case "number":
+            return parseFloat(itemValue);
+        case "integer":
+            return parseInt(itemValue);
+        case "boolean":
+            return (itemValue === "True" || itemValue === "true");
+        default:
+            return itemValue;
+    }
 };
