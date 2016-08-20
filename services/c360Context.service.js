@@ -179,8 +179,10 @@
 
                     if (actionResult.url) {
                         // Download output
-                        var iframe = angular.element("<iframe src='" + actionResult.url + "' style='display: none;' ></iframe>");
-                        angular.element("body").append(iframe);
+                        var iframe = document.createElement("iframe");
+                        iframe.setAttribute("src", actionResult.url);
+                        iframe.style.display = "none";
+                        document.body.appendChild(iframe);
 
                         $timeout(function() {
                             iframe.remove();    
@@ -250,11 +252,15 @@
             function initializeViewer(modelBlob) {
                 clearModel();
 
-                var viewerElement = angular.element('#' + _viewerDivId);
-                if (viewerElement.length === 0) {
-                    var body = angular.element('body');
-                    viewerElement = angular.element('<div id="' + _viewerDivId + '"></div>').prependTo(body);
+                var viewerElement = document.getElementById(_viewerDivId);
+                if (!viewerElement) {
+                    viewerElement = document.createElement("div");
+                    viewerElement.setAttribute("id", _viewerDivId);
+                    
+                    document.body.insertBefore(viewerElement, document.body.firstChild);
                 }
+                viewerElement.style.position = "absolute";
+                viewerElement.style.zIndex = "-1";
 
                 var deferred = $q.defer();
 
@@ -362,7 +368,7 @@
                         // TODO - Optimize this so that the first time a part is added its properties aren't searched
                         if (!isCompleteChangedPart) {
                             for (var i = 0, len = mergedEntity.uiProperties.length; i < len; i++) {
-                                if (mergedEntity.uiProperties[i].FullName === prop.value.FullName) {
+                                if (mergedEntity.uiProperties[i].fullName === prop.value.FullName) {
                                     mergedEntity.uiProperties.splice(i, 1);
                                     break;
                                 }

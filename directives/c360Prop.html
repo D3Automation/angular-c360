@@ -1,0 +1,25 @@
+<div ng-if="uiProp">
+    <div ng-if="!uiProp.isCheckbox && uiProp.choiceList == null">
+        <label>{{uiProp.fullName}}</label>
+        <input ng-model="uiProp.value" ng-model-options="{ updateOn: 'blur' }" placeholder="{{uiProp.fullName}}"
+            ng-class="{ 'c360-modified': uiProp.isModified, 'c360-invalid': uiProp.errorInfo }" 
+            ng-disabled="uiProp.isReadOnly" type={{uiProp.inputType}} />
+    </div>
+
+    <div ng-if="uiProp.choiceList != null">
+        <label>{{uiProp.fullName}}</label>
+        <select ng-model="uiProp.value" ng-options="choice.value as choice.text for choice in uiProp.choiceList"
+            ng-class="{ 'c360-modified': uiProp.isModified, 'c360-invalid': uiProp.errorInfo }"
+            ng-disabled="uiProp.isReadOnly">
+        </select>
+    </div>
+
+    <div ng-if="uiProp.isCheckbox">
+        <label>
+        <input ng-model="uiProp.value" placeholder="uiProp.fullName"
+            ng-class="{ 'c360-modified': uiProp.isModified, 'c360-invalid': uiProp.errorInfo }" 
+            ng-disabled="uiProp.isReadOnly" type="checkbox" />
+            {{uiProp.fullName}}
+        </label>
+    </div>
+</div>
