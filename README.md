@@ -27,7 +27,6 @@ The source code for this sample is in its [own repository](https://github.com/D3
 ## Dependencies
 * [Angular](https://angularjs.org/)
 * [BreezeJS](http://breeze.github.io/doc-js/)
-* [jQuery](http://jquery.com/) (will be removed soon)
 
 ## Installation
 
@@ -39,13 +38,8 @@ bower install angular-c360 --save
 ```
 
 #### Add scripts and CSS to index.html (for both angular-c360 and its dependencies)
-_Note: Assumes that the scripts for Angular iteslf have already been added_
+_Note: Assumes that the scripts for Angular iteslf have already been added above_
 ```html
-<!-- Note: If your project already includes jQuery, this is not needed -->
-<script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
-
-<!-- Links to Angular should be here (after jQuery but before angular-c360 -->
-
 <!-- angular-c360 and its dependencies -->
 <link rel="stylesheet" href="bower_components/angular-c360/angular-c360.css" />
 <script src="bower_components/breeze-client/build/breeze.min.js"></script>
@@ -115,30 +109,32 @@ additional details.
 
 See the [C360 Errors](#c360-errors) section below for details on error handling.
 
-### Binding properties to HTML Elements
-C360 properties can be bound to specific HTML elements using the provided [`c360-prop`](directives/c360Prop.directive.js) directive. This directive sets attributes on the HTML Element automatically to control [`ng-model`](https://docs.angularjs.org/api/ng/directive/ngModel), [`ng-class`](https://docs.angularjs.org/api/ng/directive/ngClass), [`ng-disabled`](https://docs.angularjs.org/api/ng/directive/ngDisabled), and [`ng-model-options`](https://docs.angularjs.org/api/ng/directive/ngModelOptions) -- all based on the definition of the specified c360 property.  Additionally, for `input` elements, it sets the `type` attribute, and for `select` elements, it populates the list of options.
-
-For example:
-```
-<input c360-prop="vm.rootPart.Foo"/>
-``` 
-Will expand to something similar to (formatted for readability): 
+### Creating Inputs for Properties
+#### Basic Usage
+Adding an input for a C360 property can easily be done using the [`c360-prop`](directives/c360Prop.directive.js) directive. The standard template for this directive includes logic to dynamically create
+a text `input`, checkbox `input`, or `select` based on the metadata associated with the property.  All it requires is a reference to the property object:
 ```html
-<input 
-    class="c360-prop ng-pristine ng-valid ng-scope md-input ng-touched"
-    ng-model="vm.rootPart.Foo.value" 
-    ng-class="{ 'c360-modified': vm.rootPart.Foo.isModified, 
-        'c360-invalid': vm.rootPart.Foo.errorInfo }" ng-disabled="vm.rootPart.Foo.isReadOnly" 
-    tooltip="" 
-    tooltip-popup-delay="1000" 
-    ng-model-options="{ updateOn: vm.rootPart.Foo.updateOn }" 
-    type="text" 
-    aria-disabled="false" 
-    aria-invalid="false"
->
+<c360-prop ui-prop="vm.rootPart.MyProperty"></c360-prop>
 ```
-It is not required to use the `c360-prop` directive to bind to properties.  Any or all of the HTML shown above could be used instead (the `ng-model` binding being the most important) and tweaked for your specific needs.  If this type
-of customization is needed, it probably makes sense to encapsulate the HTML into a [custom directive](https://docs.angularjs.org/guide/directive) (see below under [Advanced Usage](#advanced-usage)).
+
+#### Overriding Label
+It is possible to override the label text used for the input using the `label-text` attribute:
+```html
+<c360-prop ui-prop="vm.rootPart.MyProperty" label-text="My Custom Label"></c360-prop>
+```
+
+#### Styling
+The [standard template](directives/c360Prop.html) can be styled by targeting the `c360-prop` tag as well as the `c360-modified` and `c360-invalid` CSS classes.  If additional customization is needed,
+it is also possible to completely override the template by specifying the URL of another template using the `c360PropTemplateUrl` constant.  For example:
+```javascript
+var app = angular.module('app');
+app.constant('c360PropTemplateUrl', 'app/common/c360MdProp.html');
+```
+
+An working example of the custom template shown above can be found [here](https://github.com/D3Automation/angular-c360-sample/blob/master/app/common/c360MdProp.html).
+
+For even further customization, it is also possible to build your own [custom directive](https://docs.angularjs.org/guide/directive).  Using the [`c360-prop`](directives/c360Prop.directive.js) directive
+as your guide, it is relatively simple to creating bindings to the various properties of each C360 property object.
 
 ### Executing Actions (e.g. downloading drawings)
 As mentioned above, all actions defined on a given part in your C360 model are available in the client-side model as functions on that part.  Executing an action is as simple as calling one of those functions.  The simplest way to do this is through an [`ng-click`](https://docs.angularjs.org/api/ng/directive/ngClick) binding:
@@ -157,19 +153,6 @@ Adding the graphics viewer is as simple as adding a viewer element:
 There is no interactibility with the actual viewer, it's just plug and play.
 
 ## Advanced Usage
-### Custom Directives 
-[Custom directives](https://docs.angularjs.org/guide/directive) can be used to encapsulate a custom HTML template (and additional logic if needed), which can then be used within your application just like a standard HTML element.
-
-An example of this can be found in the [`c360-md-prop`](https://github.com/D3Automation/angular-c360-sample/blob/master/app/common/c360MdProp.html) directive within the **angular-c360** Sample App.  It provides the following functionality:
-* Dynamically chooses between a text input, checkbox input, or dropdown based on the property definition
-* Displays a label populated with the property's base name (can be overridden with a prop-name attribute)
-* Provides a button to reset a property to its default value if it has been modified
-
-It can be used as follows:
-```html
-<c360-md-prop ui-prop="vm.rootPart.Foo"></c360-md-prop>
-```
-
 ### Get Part By Refchain
 ```
 c360Context.getPartByRefChain('Root.Foo.Bar')
