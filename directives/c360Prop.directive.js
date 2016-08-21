@@ -5,12 +5,21 @@
     .module('angular-c360')
     .directive('c360Prop', c360Prop);
 
-    function c360Prop($compile) {
+    /* @ngInject */
+    function c360Prop($compile, $injector) {
+        var templateUrl = 'c360Prop.html';
+
+        try {
+            templateUrl = $injector.get('c360PropTemplateUrl');
+        }
+        catch(err) {
+        }
+
         return {
             restrict: 'E',
             scope: {
                 uiProp: '=',
-                propLabel: '@'
+                labelText: '@'
             },
             controller: function ($scope) {
                 setLabel();
@@ -20,12 +29,12 @@
                 });
 
                 function setLabel() {
-                    if ($scope.uiProp && !$scope.propLabel) {
-                        $scope.propLabel = $scope.uiProp.fullName;
+                    if ($scope.uiProp && !$scope.labelText) {
+                        $scope.labelText = $scope.uiProp.fullName;
                     }
                 }
             },
-            templateUrl: 'c360Prop.html'
+            templateUrl: templateUrl
         }
     }
 })();

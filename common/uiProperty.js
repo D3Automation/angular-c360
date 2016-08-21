@@ -81,7 +81,7 @@ Object.defineProperty(UIProperty.prototype, "invParamName", {
 });
 Object.defineProperty(UIProperty.prototype, "isCheckbox", {
     get: function () {
-        return (this.dataType === 'Boolean');
+        return (this.dataType === 'boolean');
     },
     enumerable: true,
     configurable: true
